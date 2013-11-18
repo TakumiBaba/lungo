@@ -45,10 +45,9 @@
     }
     li = $("<li>").attr("data-theme", "c");
     a = $("<a>");
-    name = $("<span>").addClass("ui-btn-text").html("" + name + "　を買った!");
+    name = $("<span>").addClass("ui-btn-text").html("" + name + "　がない！");
     li.append($("<a>").append(name));
     li.bind("click", function() {
-      console.log("hoge");
       return ts.take([], function(tuple) {
         var v;
         console.log(tuple);

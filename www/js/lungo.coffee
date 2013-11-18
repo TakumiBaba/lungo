@@ -16,7 +16,7 @@ reloadList = (tuple)->
     ul.append li
   ul.listview("refresh")
   ul.children().each ()->
-    $(@).find("a").removeClass("ui-icon-carat-r")#.addClass("ui-icon-check ui-btn-icon-left")
+    $(@).find("a").removeClass("ui-icon-carat-r")
 
 generateLi = (key, value)->
   name = ""
@@ -26,54 +26,15 @@ generateLi = (key, value)->
     name = value.name
   li = $("<li>").attr("data-theme", "c")
   a = $("<a>")
-  name = $("<span>").addClass("ui-btn-text").html("#{name}　を買った!")
+  name = $("<span>").addClass("ui-btn-text").html("#{name}　がない！")
   li.append $("<a>").append(name)
   li.bind "click", ()=>
-    console.log "hoge"
     ts.take [], (tuple)=>
       console.log tuple
       v = tuple[0]
       v[key].stock = 10
       ts.write [v]
   return li
-
-# generatePage = (key, value)->
-#   page = $("<div>").attr("id", key).attr("data-role", "page")
-#   header = $("<div>").attr("data-role", "header").attr("data-theme", "a")
-#   backButton = $("<a>").attr("data-icon", "delete").attr("data-rel", "back").attr("data-direction", "reverse").html("戻る")
-#   h3 = $("<h3>").html("ざいこ")
-#   content = generateContent key, value
-#   header.append backButton
-#   header.append h3
-#   page.append header
-#   page.append content
-  
-#   return page
-
-# generateContent = (key, value)->
-#   content = $("<div>").attr("data-role", "content")
-#   form = $("<form>")
-#   nameInput = $("<input>").attr("type", "text").val(value.name)
-#   form.append nameInput
-#   name = value.name
-#   button = $("<a>").attr("data-role", "button").html("買った！").attr("data-rel", "back").attr("data-direction", "reverse")
-#   content.append form
-#   content.append button
-#   button.bind "click", ()->
-#     ts.take [], (tuple)->
-#       console.log tuple[0]
-#       v = tuple[0]
-#       v[key].stock = 10
-#       v[key].name = name
-#       ts.write [v]
-#   nameInput.bind "blur", (e)->
-#     console.log e
-#     ts.take [], (tuple)->
-#       v = tuple[0]
-#       v[key].name = nameInput.val()
-#       ts.write [v]
-#       location.href = "./index.html"
-#   return content
 
   # 買うべきものが入ってるtupleを書き込むようにすればよい？re
   # hash-tuple
