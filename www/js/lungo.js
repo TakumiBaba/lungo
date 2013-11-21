@@ -8,52 +8,39 @@
   ts = new linda.TupleSpace("stock");
 
   linda.io.on("connect", function() {
-    return ts.read([], function(tuple) {
-      reloadList(tuple);
-      return ts.watch([], reloadList);
+    ts.list([], function(tuples) {
+      return reloadList(tuples);
+    });
+    return ts.watch([], function(tuple) {
+      return ts.list([], reloadList);
     });
   });
 
-  reloadList = function(tuple) {
-    var key, li, ul, value, _ref;
+  reloadList = function(tuples) {
+    var li, tuple, ul, _i, _len;
+    console.log(tuples);
     ul = $("#list");
     ul.empty();
-    _ref = tuple[0];
-    for (key in _ref) {
-      value = _ref[key];
-      console.log(key, value.stock);
-      if (value.stock > 0) {
-        continue;
-      }
-      li = generateLi(key, value);
+    for (_i = 0, _len = tuples.length; _i < _len; _i++) {
+      tuple = tuples[_i];
+      console.log(tuple);
+      li = generateLi(tuple[0]);
       ul.append(li);
     }
-    ul.listview("refresh");
-    return ul.children().each(function() {
-      return $(this).find("a").removeClass("ui-icon-carat-r");
-    });
+    return ul.listView("refresh");
   };
 
-  generateLi = function(key, value) {
-    var a, li, name,
-      _this = this;
-    name = "";
-    if (value.name === "") {
-      name = key;
-    } else {
-      name = value.name;
-    }
-    li = $("<li>").attr("data-theme", "c");
+  generateLi = function(n) {
+    var a, li, name;
+    li = $("<li>");
     a = $("<a>");
-    name = $("<span>").addClass("ui-btn-text").html("" + name + "　がない！");
+    name = $("<span>").html("" + n + "　がない！");
     li.append($("<a>").append(name));
     li.bind("click", function() {
-      return ts.take([], function(tuple) {
-        var v;
-        console.log(tuple);
-        v = tuple[0];
-        v[key].stock = 10;
-        return ts.write([v]);
+      var _this = this;
+      return ts.take([n], function(t) {
+        $("#list").empty(i);
+        return ts.list([], reloadList);
       });
     });
     return li;
